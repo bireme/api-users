@@ -1,0 +1,20 @@
+services:
+  api_gateway_users:
+    container_name: api_gateway_users
+    build:
+      context: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+    ports:
+      - ${APP_PORT}:8000
+    command: python manage.py runserver 0.0.0.0:8000
+    networks:
+      - nginx-proxy
+
+
+networks:
+  nginx-proxy:
+      external: true
