@@ -11,17 +11,23 @@ from profile.models import Profile
 
 import secrets
 
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.unregister(Group)
+
+
 class ProfileInline(StackedInline):
     model = Profile
-    readonly_fields = ('api_token',)
+    #readonly_fields = ('api_token',)
     ordering_field = 'user'
     fields = ['licence_id', 'licence_notes', 'api_token']
     can_delete = False
     extra = 1
 
-# Re-register UserAdmin
-admin.site.unregister(User)
-admin.site.unregister(Group)
+    def save_model(self, request, obj, form, change):
+        # Pass the request into the model's save() method.
+        obj.save(request=request)
+
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin, ModelAdmin):
@@ -31,10 +37,19 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
 
-    # fieldsets = [
-    #     (None, {"fields": ["username", "email", "password"]}),
-    # ]
+    # Override fieldsets to remove permissions
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Permissions', {'fields': ('is_staff', 'is_superuser', 'groups')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
 
+    def save_formset(self, request, form, formset, change):
+        instances = formset.save(commit=False)
+        for instance in instances:
+            instance.save(request=request)
+        formset.save_m2m()
 
 @admin.register(Group)
 class GroupAdmin(BaseGroupAdmin, ModelAdmin):
