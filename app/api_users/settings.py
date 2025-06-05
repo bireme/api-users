@@ -28,6 +28,8 @@ DEBUG = int(os.environ.get("APP_DEBUG", 0))
 
 ALLOWED_HOSTS = os.environ.get("APP_ALLOWED_HOSTS").split(",")
 
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+
 APISIX_ADMIN_URL = os.environ.get("APISIX_ADMIN_URL")
 APISIX_ADMIN_KEY = os.environ.get("APISIX_ADMIN_KEY")
 
