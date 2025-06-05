@@ -69,12 +69,12 @@ down:
 	@docker compose down
 
 sh:
-	@docker compose exec api_gateway_users sh
+	@docker compose exec api_users sh
 
 collectstatic:
-	@docker compose exec -T api_gateway_users uv run manage.py collectstatic --noinput
+	@docker compose exec -T api_users uv run manage.py collectstatic --noinput
 
 migrate:
-	@docker compose exec -T api_gateway_users uv run manage.py migrate
+	@docker compose exec -T api_users uv run manage.py migrate
 
 
