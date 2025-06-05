@@ -1,17 +1,17 @@
-[tool.poetry]
-name = "api-gateway-users"
+[project]
+name = "api-users"
 version = "0.1.0"
-description = ""
-authors = ["Vinicius de Andrade <viniciusdeandrade@gmail.com>"]
+description = "Add your description here"
 readme = "README.md"
-package-mode = false
+requires-python = ">=3.12"
+dependencies = [
+    "requests>=2.32.3",
+    "django>=5.2.1",
+    "django-unfold>=0.57.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-django = "5.2.*"
-django-unfold = "0.46.*"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+prod = [
+    "gunicorn>=23.0.0",
+    "mysqlclient",
+]

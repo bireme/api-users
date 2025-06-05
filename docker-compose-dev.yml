@@ -1,8 +1,9 @@
 services:
-  api_gateway_users:
-    container_name: api_gateway_users
+  api_users:
+    container_name: api_users
     build:
       context: .
+      target: dev
     restart: unless-stopped
     env_file:
       - .env
@@ -10,7 +11,7 @@ services:
       - ./app:/app
     ports:
       - ${APP_PORT}:8000
-    command: python manage.py runserver 0.0.0.0:8000
+    command: uv run manage.py runserver 0.0.0.0:8000
     networks:
       - nginx-proxy
 

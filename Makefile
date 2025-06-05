@@ -69,8 +69,12 @@ down:
 	@docker compose down
 
 sh:
-	@docker compose exec iahx_controller bash
+	@docker compose exec api_gateway_users sh
 
-cache_sh:
-	@docker compose exec api_gateway_users bash
+collectstatic:
+	@docker compose exec -T api_gateway_users uv run manage.py collectstatic --noinput
+
+migrate:
+	@docker compose exec -T api_gateway_users uv run manage.py migrate
+
 

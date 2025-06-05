@@ -1,23 +1,49 @@
 ########### BASE STAGE ###########
-FROM python:3.12-slim AS base
+FROM python:3.12-alpine AS base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV POETRY_VIRTUALENVS_CREATE=false
 
+# Install uv package manager
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+EXPOSE 8000
+
+########### DEV STAGE ###########
+FROM base AS dev
+
+# Install dependencies
+COPY pyproject.toml uv.lock .
+RUN uv sync
+
 # Set app directory
 WORKDIR app/
 
-# Install dependencies
-RUN pip install poetry
-COPY pyproject.toml poetry.lock .
-RUN poetry install --only main --no-interaction --no-ansi
 
-EXPOSE 8000
+########### PRODUCTION STAGE ###########
+FROM base AS prod
+
+# Install system dependencies
+RUN apk add --no-cache \
+    gcc \
+    musl-dev \
+    mariadb-dev \
+    python3-dev
+
+# Install dependencies
+COPY pyproject.toml uv.lock .
+RUN uv sync --group prod
+
+# Set app directory
+WORKDIR app/
+
+# create directory for collectstatic command
+RUN mkdir /app/static_files
 
 # Copy src files
 COPY ./app /app/
 
 # Execute app
-CMD uvicorn app:app --host 0.0.0.0 --port 8000 ${APP_RUN_PARAMS}
+CMD uv run gunicorn --bind unix:/tmp/gunicorn.sock api_users.wsgi ${APP_RUN_PARAMS}

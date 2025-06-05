@@ -1,0 +1,41 @@
+services:
+  api_users:
+    container_name: api-users
+    build:
+      context: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - static_files:/app/static_files
+      - gunisock:/tmp
+    expose:
+      - 8000
+    networks:
+      - nginx-proxy
+
+  api_users_webserver:
+    container_name: api-users-webserver
+    restart: unless-stopped
+    image: nginx:1.28-alpine
+    expose:
+      - 80
+    volumes:
+      - ./docker/nginx:/etc/nginx/conf.d
+      - static_files:/app/static_files
+      - gunisock:/tmp
+    depends_on:
+      - api_users
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+    networks:
+      - nginx-proxy
+
+volumes:
+  static_files:
+  gunisock:
+
+networks:
+  nginx-proxy:
+    external: true
