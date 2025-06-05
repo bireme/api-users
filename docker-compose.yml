@@ -18,17 +18,17 @@ services:
     container_name: api-users-webserver
     restart: unless-stopped
     image: nginx:1.28-alpine
-    expose:
-      - 80
+    ports:
+      - ${APP_PORT}:80
     volumes:
       - ./docker/nginx:/etc/nginx/conf.d
       - static_files:/app/static_files
       - gunisock:/tmp
     depends_on:
       - api_users
-    environment:
-      - VIRTUAL_HOST=${VIRTUAL_HOST}
-      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+    # environment:
+    #   - VIRTUAL_HOST=${VIRTUAL_HOST}
+    #   - LETSENCRYPT_HOST=${VIRTUAL_HOST}
     networks:
       - nginx-proxy
 
