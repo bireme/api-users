@@ -2,14 +2,18 @@
 
 ## Virtualenv
 
-    $ poetry new
-    $ poetry add djando
-    $ poetry shell
+    $ uv init
+    $ uv add djando
 
 ## Django project
 
     $ mkdir app
     $ django-admin startproject api-users app
-    $ python manage.py startapp users
-    $ python manage.py migrate
-    $ python manage.py createsuperuser
+    $ uv run manage.py startapp users
+    $ uv run manage.py migrate
+    $ uv run manage.py createsuperuser
+
+## Local
+
+    $ . ./set_env.sh
+    $ uv sync
