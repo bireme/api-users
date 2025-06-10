@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 
 from pathlib import Path
+from django.templatetags.static import static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,7 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 # Absolute path to the directory static files should be collected to.
-STATIC_ROOT = BASE_DIR / 'static_files'
+# STATIC_ROOT = BASE_DIR / 'static'
 
 STATIC_URL = 'static/'
 
@@ -157,3 +158,18 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+
+UNFOLD = {
+    "SITE_TITLE": "API Users",
+    "SITE_HEADER": "API Users",
+    "SITE_SUBHEADER": "Manage API Users",
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "type": "image/svg+xml",
+            "href": lambda request: static("favicon.png"),
+        },
+    ],
+ }
