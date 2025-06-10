@@ -36,6 +36,21 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
+    list_display = ('username', 'get_licence_id', 'get_licence_notes', 'get_groups')
+    list_filter = ('groups',)
+    search_fields = ('username', 'email')
+
+    def get_licence_id(self, obj):
+        return obj.profile.licence_id if hasattr(obj, 'profile') else ''
+    get_licence_id.short_description = 'ID da Licença'
+
+    def get_licence_notes(self, obj):
+        return obj.profile.licence_notes if hasattr(obj, 'profile') else ''
+    get_licence_notes.short_description = 'Notas'
+
+    def get_groups(self, obj):
+        return ", ".join([group.name for group in obj.groups.all()])
+    get_groups.short_description = 'Grupo'
 
     # Override fieldsets to remove permissions
     fieldsets = (
