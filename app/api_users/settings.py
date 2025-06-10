@@ -125,7 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 # Absolute path to the directory static files should be collected to.
-# STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'static_files'
 
 STATIC_URL = 'static/'
 
