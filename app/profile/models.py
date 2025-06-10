@@ -29,7 +29,8 @@ def update_api_gateway(profile):
     response = requests.put(url, json=payload, headers=headers)
     if not response.ok:
         raise Exception(f"API Gateway update failed with status {response.status_code}")
-
+    else:
+        messages.success(profile.user, "O token de API do usuário foi atualizado com sucesso.")
 
 # User profile model
 class Profile(models.Model):
@@ -49,7 +50,8 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
 
         # Call the function to update API Gateway
-        try:
-            update_api_gateway(self)
-        except Exception as e:
-            messages.error(request, f"Ocorreu um erro ao tentar atualizar os dados da API. Detalhes do erro: {e}")
+        if self.licence_id and self.api_token:
+            try:
+                update_api_gateway(self)
+            except Exception as e:
+                messages.error(request, f"Ocorreu um erro ao tentar atualizar os dados da API. Detalhes do erro: {e}")
