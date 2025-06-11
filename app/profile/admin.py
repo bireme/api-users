@@ -18,7 +18,7 @@ admin.site.unregister(Group)
 
 class ProfileInline(StackedInline):
     model = Profile
-    #readonly_fields = ('api_token',)
+    readonly_fields = ('api_token',)
     ordering_field = 'user'
     fields = ['licence_id', 'licence_notes', 'api_token']
     can_delete = False

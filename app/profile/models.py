@@ -37,7 +37,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     licence_id = models.CharField(max_length=64, blank=True)
     licence_notes = models.TextField(blank=True)
-    api_token = models.CharField(max_length=32, default=generate_api_key, editable=True)
+    api_token = models.CharField(max_length=32, default=generate_api_key, editable=False)
 
     class Meta:
         verbose_name = "Licence information"
