@@ -7,6 +7,7 @@ TAG_LATEST=$(IMAGE_NAME):latest
 
 ## variable used in docker-compose for tag the build image
 export IMAGE_TAG=$(IMAGE_NAME):$(APP_VER)
+PACKAGE ?=
 
 tag:
 	@echo "IMAGE TAG:" $(IMAGE_TAG)
@@ -37,10 +38,13 @@ dev_down:
 	@docker compose -f $(COMPOSE_FILE_DEV) down
 
 dev_sh:
-	@docker compose -f $(COMPOSE_FILE_DEV) exec api_gateway_users bash
+	@docker compose -f $(COMPOSE_FILE_DEV) exec api_users bash
 
 dev_cache_sh:
-	@docker compose -f $(COMPOSE_FILE_DEV) exec api_gateway_users bash
+	@docker compose -f $(COMPOSE_FILE_DEV) exec api_users bash
+
+dev_update:
+	@uv lock $(if $(PACKAGE),--upgrade-package $(PACKAGE),--upgrade)
 
 
 ## PROD shortcuts
@@ -76,5 +80,3 @@ collectstatic:
 
 migrate:
 	@docker compose exec -T api_users uv run manage.py migrate
-
-
